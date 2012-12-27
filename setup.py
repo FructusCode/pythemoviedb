@@ -22,10 +22,18 @@ setup(
         'pythemoviedb',
     ],
 
+    entry_points = {
+        'console_scripts': [
+            'movie-rename = pythemoviedb.main:main',
+        ],
+    },
+
     install_requires = [
     ],
 
     classifiers = [
+        'Environment :: Console',
+        'Intended Audience :: End Users/Desktop',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',

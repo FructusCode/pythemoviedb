@@ -1,7 +1,9 @@
 pyTheMovieDB
 ============
 
-A Python wrapper for The Movie Database API (http://www.themoviedb.org/)
+A Python wrapper for The Movie Database API (http://www.themoviedb.org/).
+
+Also provides a command-line script to automatically renamed movie files.
 
 Licensing
 =========
