@@ -15,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-d', '--debug', action='store_true', help='Enable debug output')
+    parser.add_argument('term', help='The search term')
 
     args = parser.parse_args()
 
@@ -24,11 +25,7 @@ def main():
 
     from pythemoviedb.api import *
 
-    print repr(get_movie(74534))
-    print repr(get_movie(74534, 'fr'))
-    print repr(get_movie_alternative_titles(74534))
-    print repr(get_movie_alternative_titles(74534, 'FR'))
-    print repr(get_movie_casts(74534))
+    print search_person(args.term)
 
 if __name__ == '__main__':
     main()

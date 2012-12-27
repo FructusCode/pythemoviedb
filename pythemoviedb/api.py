@@ -164,7 +164,16 @@ def make_request(action, parameters=None, base_url=configuration.API_URL, api_ve
     if not api_key:
         raise RuntimeError('No API key defined. Request would fail.')
 
-    query_string = dict(item for item in (parameters or {}).items() if item[1])
+    def stringify_value(value):
+
+        if value is True:
+            return 'true'
+        elif value is False:
+            return 'false'
+
+        return str(value)
+
+    query_string = dict((key, stringify_value(value)) for key, value in (parameters or {}).items() if value is not None)
 
     query_string.update({
         'api_key': api_key,
@@ -596,4 +605,186 @@ def get_company_movies(_id, page=None, language=None):
     return make_request('company/%s/movies' % _id, parameters={
         'page': page,
         'language': language,
+    })
+
+def get_genres(language=None):
+    """
+    Get a list of the genres.
+
+    :param language: The language as a ISO 639-1 code.
+    :returns: The genres list.
+    """
+
+    return make_request('genre/list', parameters={
+        'language': language,
+    })
+
+def get_movies_by_genre(_id, page=None, language=None, include_all_movies=False):
+    """
+    Get a list of all the movies of the specified genre.
+
+    :param _id: The genre identifier.
+    :param page: The page to show.
+    :param language: The language as a ISO 639-1 code.
+    :param include_all_movies: Whether to include all movies in the result or just the ones that were voted-up at least 10 times.
+    :returns: The movies list.
+    """
+
+    return make_request('genre/%s/movies' % _id, parameters={
+        'page': page,
+        'language': language,
+        'include_all_movies': include_all_movies,
+    })
+
+def get_keyword(_id):
+    """
+    Get the keyword that has the specified id.
+
+    :param _id: The keyword identifier.
+    :returns: The keyword.
+    """
+
+    return make_request('keyword/%s' % _id)
+
+def get_movies_by_keyword(_id, page=None, language=None):
+    """
+    Get a list of all the movies that have the specified keyword.
+
+    :param _id: The genre identifier.
+    :param page: The page to show.
+    :param language: The language as a ISO 639-1 code.
+    :returns: The movies list.
+    """
+
+    return make_request('keyword/%s/movies' % _id, parameters={
+        'page': page,
+        'language': language,
+    })
+
+def search_movie(query, page=None, language=None, include_adult=False, year=None):
+    """
+    Search for a movie.
+
+    :param query: The search query.
+    :param page: The page to show.
+    :param language: The language as a ISO 639-1 code.
+    :param include_adult: Whether to include adult movies in the result.
+    :param year: Limit search to a specific year.
+    :returns: The movies list.
+    """
+
+    return make_request('search/movie', parameters={
+        'query': query,
+        'page': page,
+        'language': language,
+        'include_adult': include_adult,
+        'year': year,
+    })
+
+def search_collection(query, page=None, language=None):
+    """
+    Search for a collection.
+
+    :param query: The search query.
+    :param page: The page to show.
+    :param language: The language as a ISO 639-1 code.
+    :returns: The collections list.
+    """
+
+    return make_request('search/collection', parameters={
+        'query': query,
+        'page': page,
+        'language': language,
+    })
+
+def search_person(query, page=None, include_adult=False):
+    """
+    Search for a person.
+
+    :param query: The search query.
+    :param page: The page to show.
+    :param include_adult: Whether to include adult movies in the result.
+    :returns: The persons list.
+    """
+
+    return make_request('search/person', parameters={
+        'query': query,
+        'page': page,
+        'include_adult': include_adult,
+    })
+
+def search_list(query, page=None, include_adult=False):
+    """
+    Search for a list.
+
+    :param query: The search query.
+    :param page: The page to show.
+    :param include_adult: Whether to include adult movies in the result.
+    :returns: The lists list.
+    """
+
+    return make_request('search/list', parameters={
+        'query': query,
+        'page': page,
+        'include_adult': include_adult,
+    })
+
+def search_company(query, page=None):
+    """
+    Search for a company.
+
+    :param query: The search query.
+    :param page: The page to show.
+    :returns: The companies list.
+    """
+
+    return make_request('search/company', parameters={
+        'query': query,
+        'page': page,
+    })
+
+def search_keyword(query, page=None):
+    """
+    Search for a keyword.
+
+    :param query: The search query.
+    :param page: The page to show.
+    :returns: The keywords list.
+    """
+
+    return make_request('search/keyword', parameters={
+        'query': query,
+        'page': page,
+    })
+
+def get_changed_movies(page=None, start_date=None, stop_date=None):
+    """
+    Get the list of changed movies.
+
+    :param page: The page to show.
+    :param start_date: The start date for changes.
+    :param stop_date: The stop date for changes.
+    :returns: The list of changed movies.
+    """
+
+    return make_request('movie/changes', parameters={
+        'page': page,
+        'start_date': format_date(start_date),
+        'stop_date': format_date(stop_date),
+    })
+
+def get_changed_persons(page=None, start_date=None, stop_date=None):
+    """
+    Get the list of changed persons.
+
+    :param page: The page to show.
+    :param start_date: The start date for changes.
+    :param stop_date: The stop date for changes.
+    :returns: The list of changed persons.
+    """
+
+    return make_request('person/changes', parameters={
+        'page': page,
+        'start_date': format_date(start_date),
+        'stop_date': format_date(stop_date),
     })
