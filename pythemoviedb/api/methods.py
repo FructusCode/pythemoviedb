@@ -1,5 +1,5 @@
 """
-The API contact functions.
+The API methods.
 """
 
 import pythemoviedb.configuration as configuration
@@ -9,152 +9,6 @@ import urllib
 import urllib2
 import urlparse
 import json
-from functools import wraps
-
-class APIError(Exception):
-    """
-    An API exception class.
-    """
-
-    SUCCESS = 1
-    INVALID_SERVICE = 2
-    AUTHENTICATION_FAILED = 3
-    INVALID_FORMAT = 4
-    INVALID_PARAMETERS = 5
-    INVALID_ID = 6
-    INVALID_API_KEY = 7
-    DUPLICATE_ENTRY = 8
-    SERVICE_OFFLINE = 9
-    SUSPENDED_API_KEY = 10
-    INTERNAL_ERROR = 11
-
-    def __init__(self, status_code, status_message):
-        """
-        Create an API exception.
-
-        :param msg: The message.
-        :param status_code: The status code, as received in the API response.
-        :param status_message: The status message, as received in the API response.
-        """
-
-        super(APIError, self).__init__('%s (error %s)' % (status_message, status_code))
-
-        self.status_code = status_code
-        self.status_message = status_message
-
-    @staticmethod
-    def silent_error(status_code, default_return_value=None):
-        """
-        A decorator that silence some errors.
-        """
-
-        def decorator(f):
-            @wraps(f)
-            def wrapper(*args, **kw):
-                try:
-                    return f(*args, **kw)
-
-                except APIError as ex:
-
-                    if ex.status_code == status_code:
-                        return default_return_value
-
-                    else:
-                        raise
-
-            return wrapper
-
-        return decorator
-
-class AuthenticationToken(object):
-    """
-    An authentication token.
-    """
-
-    def __init__(self, request_token, expires_at):
-        """
-        Create an authentication token.
-        """
-
-        self.request_token = request_token
-        self.expires_at = expires_at
-
-    def __str__(self):
-        """
-        Get a string representation of the AuthenticationToken.
-        """
-
-        return self.request_token
-
-    def __repr__(self):
-        """
-        Get a Python representation of the AuthenticationToken.
-        """
-
-        return '%s(%s)' % (
-            self.__class__,
-            ', '.join('%s=%r' % item for item in self.__dict__.items()),
-        )
-
-class Session(object):
-    """
-    An session.
-    """
-
-    def __init__(self, session_id, expires_at):
-        """
-        Create a session.
-        """
-
-        self.session_id = session_id
-        self.expires_at = expires_at
-
-    def __str__(self):
-        """
-        Get a string representation of the Session.
-        """
-
-        return self.session_id
-
-    def __repr__(self):
-        """
-        Get a Python representation of the Session.
-        """
-
-        return '%s(%s)' % (
-            self.__class__,
-            ', '.join('%s=%r' % item for item in self.__dict__.items()),
-        )
-
-class GuestSession(object):
-    """
-    An session.
-    """
-
-    def __init__(self, guest_session_id, expires_at):
-        """
-        Create a guest session.
-        """
-
-        self.guest_session_id = guest_session_id
-        self.expires_at = expires_at
-
-    def __str__(self):
-        """
-        Get a string representation of the GuestSession.
-        """
-
-        return self.guest_session_id
-
-    def __repr__(self):
-        """
-        Get a Python representation of the GuestSession.
-        """
-
-        return '%s(%s)' % (
-            self.__class__,
-            ', '.join('%s=%r' % item for item in self.__dict__.items()),
-        )
 
 def make_request(action, parameters=None, base_url=configuration.API_URL, api_version=configuration.API_VERSION, api_key=configuration.API_KEY):
     """
@@ -246,12 +100,7 @@ def get_authentication_token():
     :returns: The authentication token.
     """
 
-    response = make_request('authentication/token/new')
-
-    return AuthenticationToken(
-        request_token=response['request_token'],
-        expires_at=parse_datetime(response['expires_at']),
-    )
+    return make_request('authentication/token/new')
 
 def new_session(request_token):
     """
@@ -261,14 +110,9 @@ def new_session(request_token):
     :returns: The session.
     """
 
-    response = make_request('authentication/session/new', {
+    return make_request('authentication/session/new', {
         'request_token': request_token,
     })
-
-    return Session(
-        session_id=response['session_id'],
-        expires_at=parse_datetime(response['expires_at']),
-    )
 
 def new_guest_session():
     """
@@ -277,12 +121,7 @@ def new_guest_session():
     :returns: The session.
     """
 
-    response = make_request('authentication/guest_session/new')
-
-    return GuestSession(
-        guest_session_id=response['guest_session_id'],
-        expires_at=parse_datetime(response['expires_at']),
-    )
+    return make_request('authentication/guest_session/new')
 
 def get_movie(_id, language=None):
     """

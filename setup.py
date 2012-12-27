@@ -20,6 +20,7 @@ setup(
 
     packages = [
         'pythemoviedb',
+        'pythemoviedb.api',
     ],
 
     entry_points = {

@@ -25,7 +25,8 @@ def main():
 
     from pythemoviedb.api import *
 
-    print search_person(args.term)
+    print methods.get_movie(550)
+    print methods.get_movie_alternative_titles(550)
 
 if __name__ == '__main__':
     main()
