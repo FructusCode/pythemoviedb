@@ -25,8 +25,9 @@ def main():
 
     from pythemoviedb.api import *
 
-    print methods.get_movie(550)
-    print methods.get_movie_alternative_titles(550)
+    import json
+
+    print json.dumps(methods.get_movie_all(550), indent=1)
 
 if __name__ == '__main__':
     main()

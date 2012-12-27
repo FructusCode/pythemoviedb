@@ -123,119 +123,172 @@ def new_guest_session():
 
     return make_request('authentication/guest_session/new')
 
-def get_movie(_id, language=None):
+def get_movie(_id, language=None, append_to_response=None):
     """
     Get the movie that has the specified identifier.
 
     :param _id: The movie identifier.
     :param language: The language as a ISO 639-1 code.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie if it exists.
     """
 
     return make_request('movie/%s' % _id, parameters={
         'language': language,
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
     })
 
-def get_movie_alternative_titles(_id, country=None):
+def get_movie_all(_id, language=None, country=None):
+    """
+    Get the movie that has the specified identifier with all the possible information.
+
+    :param _id: The movie identifier.
+    :param language: The language as a ISO 639-1 code.
+    :param country: The country as an ISO 3166-1 code.
+    :returns: The movie if it exists.
+    """
+
+    append_to_response = [
+        'alternative_titles',
+        'casts',
+        'images',
+        'keywords',
+        'releases',
+        'trailers',
+        'translations',
+        'similar_movies',
+        'lists',
+    ]
+
+    return make_request('movie/%s' % _id, parameters={
+        'language': language,
+        'country': country,
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
+    })
+
+def get_movie_alternative_titles(_id, country=None, append_to_response=None):
     """
     Get a movie alternative titles.
 
     :param _id: The movie identifier.
     :param country: The country as an ISO 3166-1 code.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie alternative titles if it exists.
     """
 
     return make_request('movie/%s/alternative_titles' % _id, parameters={
         'country': country,
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
     })
 
-def get_movie_casts(_id):
+def get_movie_casts(_id, append_to_response=None):
     """
     Get a movie casts.
 
     :param _id: The movie identifier.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie casts if it exists.
     """
 
-    return make_request('movie/%s/casts' % _id)
+    return make_request('movie/%s/casts' % _id, parameters={
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
+    })
 
-def get_movie_images(_id, language=None):
+def get_movie_images(_id, language=None, append_to_response=None):
     """
     Get a movie images.
 
     :param _id: The movie identifier.
     :param language: The language as a ISO 639-1 code.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie if it exists.
     """
 
     return make_request('movie/%s/images' % _id, parameters={
         'language': language,
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
     })
 
-def get_movie_keywords(_id):
+def get_movie_keywords(_id, append_to_response=None):
     """
     Get a movie keywords.
 
     :param _id: The movie identifier.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie keywords if it exists.
     """
 
-    return make_request('movie/%s/keywords' % _id)
+    return make_request('movie/%s/keywords' % _id, parameters={
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
+    })
 
-def get_movie_releases(_id):
+def get_movie_releases(_id, append_to_response=None):
     """
     Get a movie releases.
 
     :param _id: The movie identifier.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie releases if it exists.
     """
 
-    return make_request('movie/%s/releases' % _id)
+    return make_request('movie/%s/releases' % _id, parameters={
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
+    })
 
-def get_movie_trailers(_id):
+def get_movie_trailers(_id, append_to_response=None):
     """
     Get a movie trailers.
 
     :param _id: The movie identifier.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie trailers if it exists.
     """
 
-    return make_request('movie/%s/trailers' % _id)
+    return make_request('movie/%s/trailers' % _id, parameters={
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
+    })
 
-def get_movie_translations(_id):
+def get_movie_translations(_id, append_to_response=None):
     """
     Get a movie translations.
 
     :param _id: The movie identifier.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie translations if it exists.
     """
 
-    return make_request('movie/%s/translations' % _id)
+    return make_request('movie/%s/translations' % _id, parameters={
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
+    })
 
-def get_movie_similar_movies(_id, language=None):
+def get_movie_similar_movies(_id, language=None, append_to_response=None):
     """
     Get a movie similar :movies.
 
     :param _id: The movie identifier.
     :param language: The language as a ISO 639-1 code.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie similar movies if it exists.
     """
 
     return make_request('movie/%s/similar_movies' % _id, parameters={
         'language': language,
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
     })
 
-def get_movie_lists(_id, language=None):
+def get_movie_lists(_id, language=None, append_to_response=None):
     """
     Get a movie lists.
 
     :param _id: The movie identifier.
     :param language: The language as a ISO 639-1 code.
+    :param append_to_response: A list of additinal methods to append to the response.
     :returns: The movie lists if it exists.
     """
 
     return make_request('movie/%s/lists' % _id, parameters={
         'language': language,
+        'append_to_response': append_to_response and ','.join(append_to_response) or None,
     })
 
 def get_movie_changes(_id, start_date=None, stop_date=None):
