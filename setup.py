@@ -23,12 +23,6 @@ setup(
         'pythemoviedb.api',
     ],
 
-    entry_points = {
-        'console_scripts': [
-            'movie-rename = pythemoviedb.main:main',
-        ],
-    },
-
     install_requires = [
     ],
 
